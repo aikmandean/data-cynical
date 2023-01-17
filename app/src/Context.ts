@@ -44,7 +44,7 @@ val = (e: { currentTarget: any }) => ({ value: e.currentTarget.value, checked: e
 
 [storeQueryLimit, setStoreQueryLimit] = createSignal(25),
 
-[storeTableVisible, setStoreTableVisible] = createSignal("MsgFilter"),
+[storeTableVisible, setStoreTableVisible] = createSignal(""),
 
 [storeDb, setStoreDb] = createStore({
 	uDatabase: "SQLITE" as APIProps["dbConnect"]["database"],
@@ -53,53 +53,9 @@ val = (e: { currentTarget: any }) => ({ value: e.currentTarget.value, checked: e
 }),
 
 [storeForm, setStoreForms] = createStore<typeof TDC["ToFunc"]["toFunc"]>({
-	telIsUS: { def: "subStr(colTel, 2) == '+1'", params: { colTel: "" } }
 }),
 
 [storeQuery, setStoreQuery] = createStore<typeof TDC["ToQueries"]["toQueries"]>({
-	Msg: { 
-		anyCmd: { is: "cmdRaw", raw: `SELECT * FROM message` },
-		anyFrom: { is: "fromRaw", raw: "" }, 
-		toAlias: {}, toFunc: {}, toJoin: []
-	},
-	MsgFilter: {
-		anyCmd: { is: "cmdWhere", condition: "true" },
-		anyFrom: { is: "fromUse", use: "Msg" }, 
-		toAlias: {
-			msgText: { is: "aliasDefCol", def: "text" },
-			msgSender: { is: "aliasDefCol", def: "handle_id" },
-			msgDate: { is: "aliasDefCol", def: "date" },
-			msgIsFromMe: { is: "aliasDefCol", def: "is_from_me" },
-			senderTel: { is: "aliasDefExpr", def: "Hndl.id" },
-			senderIsUS: { is: "aliasCall", call: "telIsUS", params: { colTel: "senderTel" } },
-		}, 
-		toFunc: { telIsUS: { ...storeForm.telIsUS } }, 
-		toJoin: [
-			{ to: "Hndl", type: "LEFT", on: "msgSender = Hndl.ROWID" }
-		]
-	},
-	Room: {
-		anyCmd: { is: "cmdRaw", raw: `SELECT * FROM chat` },
-		anyFrom: { is: "fromRaw", raw: "" }, 
-		toAlias: {}, toFunc: {}, toJoin: []
-	},
-	Hndl: {
-		anyCmd: { is: "cmdRaw", raw: `SELECT * FROM handle` },
-		anyFrom: { is: "fromRaw", raw: "" }, 
-		toAlias: {}, toFunc: {}, toJoin: []
-	},
-	HndlFilter: {
-		anyCmd: { is: "cmdWhere", condition: "true" },
-		anyFrom: { is: "fromUse", use: "Hndl" }, 
-		toAlias: {}, toFunc: {}, toJoin: []
-	},
-	MsgHndl: {
-		anyCmd: { is: "cmdWhere", condition: "true" },
-		anyFrom: { is: "fromUse", use: "MsgFilter" }, 
-		toAlias: {}, toFunc: {}, toJoin: [
-			{ to: "HndlFilter", on: "", type: "LEFT" }
-		]
-	},
 }),
 
 DIMENSION = {
