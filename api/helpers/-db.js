@@ -1,18 +1,21 @@
 import { declareProps, fn, MCast } from "@hwyblvd/st";
 import { ConnectionString, RawQueryString } from "./-props.js";
 import { Connect } from "./db-connect.js";
+import ppp from "papaparse";
+
+export let 
 
 /** @type {Awaited<ReturnType<typeof Connect["MSSQL"]>>["queryFunction"]} */
-export let activeConnection;
+activeConnection,
 /** @type {keyof typeof Connect} */
-export let dbProvider;
-
-export const DbProps = declareProps({
-    /** @ts-ignore @type {keyof typeof Connect} */
-    database: MCast("", { type: "string" })
-})
+dbProvider;
 
 export const
+
+DbProps = declareProps({
+    /** @ts-ignore @type {keyof typeof Connect} */
+    database: MCast("", { type: "string" })
+}),
 
 dbConnect = fn(async props => {
     activeConnection = (await Connect[props.database](props)).queryFunction;
@@ -30,6 +33,10 @@ dbDisconnect = fn(async props => {
     activeConnection = undefined;
     // @ts-ignore
     dbProvider = undefined;
-})
+}),
+
+dbDownload = fn(async props => ({
+        csvContent: `data:text/csv;charset=utf-8,${ppp.unparse(await activeConnection(props), { header: true })}`    
+}), RawQueryString)
 
 ;

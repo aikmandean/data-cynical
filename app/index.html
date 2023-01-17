@@ -6,7 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#000000" />
   <link rel="shortcut icon" type="image/ico" href="/src/assets/favicon.ico" />
-  <title>Solid App</title>
+  <link rel="stylesheet" href="./src/index.css">
+  <title>Data Cynical</title>
 </head>
 
 <body>
@@ -21,12 +22,12 @@
       --t-border: #edf2f7;
       --t-border-2: #cbd5e0;
       --n-bg: white;
-      --n-bg-2: rgb(203, 213, 224);
-      --n-bg-2-a: rgb(176, 203, 232);
+      /* rgb(203, 213, 224); */
       --n-c: rgb(45, 55, 72);
       --t-c: rgb(45, 55, 72);
       --t-bg: white;
       --alt-c: rgb(45, 55, 72);
+      /* font-size: 10px; */
     }
 
     @media (prefers-color-scheme: dark) {
@@ -34,7 +35,6 @@
         --t-border: #1B202C;
         --t-border-2: #262C3A;
         --n-bg: #1B202C;
-        --n-bg-2: rgb(45, 55, 72);
         --n-c: #EDF1F8;
         --t-c: #cbd5e0;
         --t-bg: #151720;
@@ -67,49 +67,7 @@
       overflow: hidden;
     }
 
-    nav {
-      padding: .5em;
-      background: var(--n-bg);
-    }
-
-    nav div {
-      padding-top: .5em;
-    }
-
-    nav span {
-      height: 1em;
-      width: 1px;
-
-      padding: 0 0.1em;
-      padding-bottom: 0.2em;
-      border-left: 1px solid #8e9fb23d;
-    }
-
-    nav hr {
-      margin-bottom: 0;
-      border: none;
-      height: 1px;
-      background-color: #8e9fb23d;
-    }
-
-    nav button,
-    nav select {
-      border: none;
-      border-radius: .25em;
-      font-weight: 500;
-      background: var(--n-bg-2);
-      color: var(--alt-c);
-      box-shadow: #0002 0px -2px 3px 0px inset;
-      padding: .35em .75em;
-      margin-right: .5em;
-      outline: none;
-    }
-    nav button.active {
-      background: var(--n-bg-2-a);
-    }
-
     input {
-      background: var(--n-bg-2);
       border: solid 1px transparent;
       border-radius: .25em;
       margin-bottom: .25em;
@@ -119,11 +77,22 @@
       font-family: 'Courier New', Courier, monospace;
       margin-right: .5em;
       font-size: 1em;
+      box-sizing: border-box;
     }
 
     input:active,
     input:focus {
       border-color: rgb(207, 102, 121);
+    }
+
+    table input {
+      border-radius: 0;
+      background-color: transparent;
+      padding: 0;
+    }
+    table input:active,
+    table input:focus {
+      border: none;
     }
 
     td,

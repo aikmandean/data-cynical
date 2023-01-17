@@ -5,4 +5,5 @@ export {
     dbQuery,
     dbIsConnected,
     dbDisconnect,
+    dbDownload,
 } from "./helpers/-db.js";

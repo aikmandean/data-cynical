@@ -1,0 +1,15 @@
+{
+    "scripts": {
+        "test": "npx vitest",
+        "coverage": "npx vitest run --coverage"
+    },
+    "devDependencies": {
+        "@types/mocha": "^10.0.1",
+        "@vitest/coverage-c8": "^0.26.3",
+        "ts-node": "^10.9.1",
+        "vitest": "^0.26.3"
+    },
+    "dependencies": {
+        "@hwyblvd/st": "^2.0.0"
+    }
+}

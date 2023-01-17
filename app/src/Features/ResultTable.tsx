@@ -1,30 +1,36 @@
 import { declareProps, fn } from "@hwyblvd/st"
 import { createSolidTable, flexRender, getCoreRowModel, getExpandedRowModel, getGroupedRowModel } from "@tanstack/solid-table"
 import { createEffect, createMemo, createRoot, createSignal, For, Match, Show, Switch } from "solid-js"
-import { dimension } from "../Context"
+import { DIMENSION } from "../Context"
 import { Style, useRef } from "../xlib/Ref"
 
-const { Data, ShowGrouping } = declareProps({
+const 
+
+{ Data, ShowGrouping } = declareProps({
 	showGrouping: false,
 	data: [{}]
-})
+}),
 
-const [tbl] = useRef();
+[tbl] = useRef();
 
 createRoot(() => <Style {...tbl} 
-	min-width={dimension.main.w}
-	border-radius={".5em"}
-	overflow={"hidden"}
-	margin-right={"1em"}
-	margin-bottom={"8em"}
+	min-width={DIMENSION.main.w}
+	font-size={".8em"}
 />);
 
 export const WindowTable = fn(props => {
 	
-	const cols = createMemo(() => props.data[0] && Object.keys(props.data[0]))
-	const [aggs, setAggs] = createSignal<string[]>([])
+	const cols = createMemo(() => props.data[0] && Object.keys(props.data[0]));
+	const [aggs, setAggs] = createSignal<string[]>([]);
 
-	createEffect(() => setAggs(cols()?.map(() => "count") || []))
+	createEffect(() => setAggs(cols()?.map(() => "count") || []));
+	
+	// Attempt to not reset the row models when group by column changes.
+	const tableModel = createMemo(() => ({
+		getCoreRowModel: getCoreRowModel(),
+		getGroupedRowModel: getGroupedRowModel(),
+		getExpandedRowModel: getExpandedRowModel()
+	}));
 	
 	const table = createMemo(() => createSolidTable({
 		data: props.data, 
@@ -34,11 +40,8 @@ export const WindowTable = fn(props => {
 			enableGrouping: true,
 			aggregationFn: aggs()[i]
 		})) || [],
-		getCoreRowModel: getCoreRowModel(),
-		getGroupedRowModel: getGroupedRowModel(),
-		getExpandedRowModel: getExpandedRowModel()
-		
-	}))
+		...tableModel()
+	}));
 
 	return (
 		<table {...tbl}>
@@ -160,5 +163,5 @@ export const WindowTable = fn(props => {
 				</For>
 			</tbody>
 		</table>
-	)
-}, Data, ShowGrouping)
+	);
+}, Data, ShowGrouping);
