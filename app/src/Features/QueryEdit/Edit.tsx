@@ -401,8 +401,9 @@ EditSelect = fn(props => {
                                                                 >Form</button>
                                                         </div>
                                                         <div>
+                                                            <p class="p-2 pt-6 text-xs">Select column</p>
                                                             <Show 
-                                                                when={queryWindow.columns(props).includes(a.def)}
+                                                                when={!a.def || queryWindow.columns(props).includes(a.def)}
                                                                 fallback={<>
                                                                     <select 
                                                                         class="w-full p-4 font-mono text-xs"
@@ -425,6 +426,12 @@ EditSelect = fn(props => {
                                                                     </select>
                                                                 }
                                                             />
+                                                            <details class="p-2 pt-6 text-xs">
+                                                                <summary>Manual column entry</summary>
+                                                                <div>
+                                                                    <input onChange={e => updateMacro.defCol.set(val(e))} />
+                                                                </div>
+                                                            </details>
                                                         </div>
                                                     </div>
                                                     <div {...cmdSide}>
