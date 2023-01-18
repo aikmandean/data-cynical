@@ -170,7 +170,7 @@ function App() {
 					</div>		
 				</aside>
 				<div class="bg-stone-50">
-					<Show when={storeTableVisible()}>
+					<Show when={storeTableVisible() && visibleTable()}>
 						<SqlWindow
 							limit={storeQueryLimit()} 
 							setLimit={storeQueryLimit} 

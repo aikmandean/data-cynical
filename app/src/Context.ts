@@ -8,10 +8,10 @@ export const
 ctxLocalStorage = {
 	stateToObject() {
 		return {
-			storeQueryLimit: storeQueryLimit(),
-			storeTableVisible: storeTableVisible(),
 			storeForm: unwrap(storeForm),
-			storeQuery: unwrap(storeQuery)
+			storeQuery: unwrap(storeQuery),
+			storeQueryLimit: storeQueryLimit(),
+			storeTableVisible: storeTableVisible()
 		};
 	},
 	stateSave() {
