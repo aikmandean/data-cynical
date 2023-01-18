@@ -65,9 +65,9 @@ useUpdateQuery = fn(p => {
                 }
             },
             alias: {
-                defCol: fn(props => setStore()("toAlias", "colNew", { is: "aliasDefCol", def: "exampleCol" })),
+                defCol: fn(props => setStore()("toAlias", "colNew", { is: "aliasDefCol", def: "" })),
                 defExpr: fn(props => setStore()("toAlias", "colNew", { is: "aliasDefExpr", def: "exampleCol / 100" })),
-                call: fn(props => setStore()("toAlias", "colNew", { is: "aliasCall", call: "exampleFunc", params: {} })),
+                call: fn(props => setStore()("toAlias", "colNew", { is: "aliasCall", call: "", params: {} })),
             }
         }
     })
