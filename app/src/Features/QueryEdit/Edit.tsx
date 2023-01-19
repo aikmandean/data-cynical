@@ -172,6 +172,7 @@ createRoot(() => <>
     `} />
     <Style {...tableIncludeList} 
         background-size={"40px 40px"}
+        background-attachment={"local"}
         background-image={"radial-gradient(circle, currentColor 1px, rgba(0, 0, 0, 0) 1px)"}
     />
     <Class {...tableInclude} class={`
@@ -293,13 +294,13 @@ EditSelect = fn(props => {
                                 </td>
                                 <td class="bg-transparent">
                                     <select value={unionAlias({
-                                        aliasCall: () => "Form",
-                                        aliasDefCol: () => "Column",
-                                        aliasDefExpr: () => "Expression"
+                                        aliasCall: () => "F",
+                                        aliasDefCol: () => "C",
+                                        aliasDefExpr: () => "R"
                                     })(alias)(alias)} onChange={e => updateMacro.do.type(val(e))}>
-                                        <option textContent="Column" />
-                                        <option textContent="Form" />
-                                        <option textContent="Expression" />
+                                        <option value="C" textContent="Column" />
+                                        <option value="F" textContent="Form" />
+                                        <option value="R" textContent="Expression" />
                                     </select>
                                 </td>
                                 {/* <td class="bg-transparent">
@@ -429,7 +430,7 @@ EditSelect = fn(props => {
                                                             <details class="p-2 pt-6 text-xs">
                                                                 <summary>Manual column entry</summary>
                                                                 <div>
-                                                                    <input onChange={e => updateMacro.defCol.set(val(e))} />
+                                                                    <input value={a.def} onChange={e => updateMacro.defCol.set(val(e))} />
                                                                 </div>
                                                             </details>
                                                         </div>

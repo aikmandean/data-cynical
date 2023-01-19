@@ -1,5 +1,5 @@
 import { fn, MHide } from "@hwyblvd/st";
-import { createEffect, createResource, createRoot, createSignal } from "solid-js";
+import { createEffect, createResource, createRoot, createSignal, Show } from "solid-js";
 import { DIMENSION } from "../../Context";
 import { API } from "../../Url";
 import { Class, Tw, useRef } from "../../xlib/Ref";
@@ -34,17 +34,26 @@ SqlWindow = fn(props => {
 	
 	const [showGrouping, setShowGrouping] = createSignal(true);
 	const [ignoreLimit, setIgnoreLimit] = createSignal(false);
-	const query = () => renderQueryComplete(props);
-	const [data] = createResource(async () => {
+	const [queryError, setQueryError] = createSignal<any>(null)
+	const query = () => {
 		try {
-			const q = query();
-			console.log({props, query: q});
-			if(!q) return [];
-			return API.dbQuery({ rawQueryString: ""
-				+ q
-				+ (ignoreLimit() ? "" : ` LIMIT ${props.limit}`) 
-			});
-		} catch { return []; }
+			const q = renderQueryComplete(props);
+			setQueryError(null);
+			return q;
+		} catch (error) { setQueryError(error); }
+	};
+	const [data] = createResource(async () => {
+		const q = query();
+		if(!q) return [];
+		const data = await API.dbQuery({ rawQueryString: ""
+			+ q
+			+ (ignoreLimit() ? "" : ` LIMIT ${props.limit}`) 
+		});
+		if("sent" in data && "url" in data) {
+			setQueryError(data);
+			return [];
+		}
+		else return data;
 	}, x => x);
 
 	createEffect(() => updateWindow.results({ ...props, data: data() }));
@@ -130,7 +139,22 @@ SqlWindow = fn(props => {
 				</div>
 				<div hidden={routeMain() != "VIEW:RUN"}
 					aria-selected={routeMain() == "VIEW:RUN"}>
-					<WindowTable data={data()||[]} showGrouping={showGrouping()} />
+					<Show when={!queryError()} 
+						fallback={<>
+							<h3 class="p-4">Query Error</h3>
+							<pre class="text-xs p-4">{JSON.stringify(queryError(), undefined, 4)}</pre>
+						</>}
+						children={
+							<Show when={(data()||[]).length}
+								fallback={
+									<h3 class="p-4">No Results</h3>
+								}
+								children={
+									<WindowTable data={data()||[]} showGrouping={showGrouping()} />
+								}
+							/>
+						}
+					/>
 				</div>
 				<div class="hidden aria-selected:block" 
 					aria-selected={routeMain() == "VIEW:EXPORT"}>
@@ -147,15 +171,17 @@ SqlWindow = fn(props => {
 							>Download</h3>
 						<button
 							onClick={async () => {
-								const { csvContent } = await API.dbDownload({ rawQueryString: `${query()} LIMIT ${props.limit}` })
-								open(csvContent)
+								const { csvContent } = await API.dbDownload({ rawQueryString: `${query()} LIMIT ${props.limit}` });
+								const csvUrl = URL.createObjectURL(new Blob([csvContent], { type: "text/csv" }));
+								open(csvUrl);
 							}} 
 							class="block text-xs mb-1 py-1 px-4 text-white bg-emerald-500 hover:bg-emerald-700"
 							>Snapshot</button>
 						<button
 							onClick={async () => {
-								const { csvContent } = await API.dbDownload({ rawQueryString: query() })
-								open(csvContent)
+								const { csvContent } = await API.dbDownload({ rawQueryString: query() });
+								const csvUrl = URL.createObjectURL(new Blob([csvContent], { type: "text/csv" }));
+								open(csvUrl);
 							}}
 							class="block text-xs mb-1 py-1 px-4 text-white bg-lime-500 hover:bg-lime-700"
 							>Whole Table</button>

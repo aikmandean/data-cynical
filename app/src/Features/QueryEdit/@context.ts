@@ -102,9 +102,9 @@ useUpdateMacro = fn(p => {
                     setToAlias()(p.aliasId, undefined as any)
                 }, Value),
                 type: fn(props => 
-                    props.value[0] == "C" ? setAlias()("is", "aliasDefCol") :
-                    props.value[0] == "R" ? setAlias()("is", "aliasDefExpr") :
-                    props.value[0] == "F" ? setAlias()("is", "aliasCall") : {}
+                    props.value == "C" ? setAlias()("is", "aliasDefCol") :
+                    props.value == "R" ? setAlias()("is", "aliasDefExpr") :
+                    props.value == "F" ? setAlias()("is", "aliasCall") : {}
                 , Value)
             }
         }

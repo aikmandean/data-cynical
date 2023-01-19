@@ -1,6 +1,6 @@
 import type * as TAPI from "../../api/v1";
 
-export const apiRoot = "http://localhost:8080/api";
+export const apiRoot = "/api";
 export const apiBasic = apiRoot + "/v1";
 
 export async function fetchJson(url = "", body = {}, options = {}) {

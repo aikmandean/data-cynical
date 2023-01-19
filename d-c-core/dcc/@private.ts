@@ -7,13 +7,14 @@ parseReferences = fn(props => {
 
     unionFrom({
         fromRaw: from => {},
-        fromUse: from => {
+        fromUse: from => (
+            parseReferences({ ...props, toQuery: props.toQueries[from.use] }),
             props.outRefs.add(from.use)
-            parseReferences({ ...props, toQuery: props.toQueries[from.use] })
-        }
+        )
     })(props.toQuery.anyFrom)(props.toQuery.anyFrom)
 
     for (const { to } of props.toQuery.toJoin) 
+        parseReferences({ ...props, toQuery: props.toQueries[to] }),
         props.outRefs.add(to)
     
 }, { outRefs: new Set }, ToQuery, ToQueries)

@@ -10,7 +10,7 @@ const setup = fn(async props => {
     await addFileRoutes(props)
     createServingProxy({
         ...props,
-        upstreamUrl: "http://127.0.0.1:3000/",
+        upstreamUrl: "http://127.0.0.1:7575/",
         proxyEndpoint: "/"
     });
     enableSwagger(props)
@@ -22,8 +22,8 @@ const setup = fn(async props => {
 setup({
     path: "api",
     routes: [],
-    port: 8080,
+    port: 7474,
     host: "127.0.0.1",
-    baseUrl: "http://localhost:8080",
+    baseUrl: "http://localhost:7474",
     parent: metaDir(import.meta)
 });

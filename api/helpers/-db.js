@@ -36,7 +36,7 @@ dbDisconnect = fn(async props => {
 }),
 
 dbDownload = fn(async props => ({
-        csvContent: `data:text/csv;charset=utf-8,${ppp.unparse(await activeConnection(props), { header: true })}`    
+        csvContent: ppp.unparse(await activeConnection(props), { header: true })    
 }), RawQueryString)
 
 ;

@@ -51,7 +51,7 @@ updateQueryNew = {
         closeReset: fn(props => {
             setQueryNewModal(false)
             setQueryNew({
-                anyCmd: { is: "cmdSelect" },
+                anyCmd: { is: "cmdWhere", condition: "true" },
                 anyFrom: { is: "fromRaw", raw: "Example" },
                 toAlias: {},
                 toFunc: {},

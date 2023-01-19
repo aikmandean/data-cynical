@@ -32,7 +32,7 @@ function App() {
 	const [sidePane, setSidePane] = createSignal<"QUERY"|"FORM"|"CONNECT">("QUERY");
 	const [dbTables] = createResource(() => API.dbQuery({ rawQueryString: 
 		queryConn.listDbTables() })
-		.then(x => x.map(y => (y as any).name))
+		.then(x => x.map(y => (y as any).name).sort())
 		, x => x);
 
 	return (
@@ -69,7 +69,8 @@ function App() {
 
 								<h3 {...leftSideH}>All</h3>
 
-								<For each={Object.entries(storeQuery)}>
+								<For each={Object.entries(storeQuery)
+										.sort((a, b) => (a[0] > b[0]) ? 1 : -1)}>
 									{([queryId, query], i) => <>
 
 										<Tw class="block text-xs cursor-pointer py-1 px-2 w-full text-left" />
@@ -118,7 +119,7 @@ function App() {
 								<Tw class="block w-full text-xs text-left py-1 pl-2 font-semibold" />
 								<Tw class="text-lime-800 hover:bg-lime-200" />
 								<button onClick={() => ctxLocalStorage.stateSave()}>
-									In Browser
+									Browser Save
 								</button>
 								<Tw class="block w-full text-xs text-left py-1 pl-2 font-semibold" />
 								<Tw class="text-lime-800 hover:bg-lime-200" />
@@ -145,6 +146,11 @@ function App() {
 									x.click()
 								}}>
 									Load File
+								</button>
+								<Tw class="block w-full text-xs text-left py-1 pl-2 font-semibold" />
+								<Tw class="text-orange-800 hover:bg-orange-200" />
+								<button onClick={() => { localStorage.clear(); location.reload(); }}>
+									Browser Clear
 								</button>
 
 								<br />
