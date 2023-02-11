@@ -7,6 +7,8 @@ import { Class, Tw, useRef } from "./xlib/Ref";
 import { queryConn, updateConn } from "./Features/DbConnect/@context";
 import { FormNew as NewForm } from "./Features/FormEdit/Form";
 import { API } from "./Url";
+import { Portal } from "solid-js/web";
+import { WindowTable } from "./Features/ResultTable";
 
 // #region CSS
 const [tabBtn, leftSideH] = useRef();
@@ -34,12 +36,44 @@ function App() {
 		queryConn.listDbTables() })
 		.then(x => x.map(y => (y as any).name).sort())
 		, x => x);
-
+	const [dbPreview, setDbpreview] = createSignal("")
+	const [dataPreview] = createResource(async () => {
+		const q = dbPreview();
+		if(!q) return [];
+		const data = await API.dbQuery({ rawQueryString: `SELECT * FROM ${q} LIMIT 5` });
+		if("sent" in data && "url" in data) 
+			return [];
+		
+		else return data;
+	}, x => x);
 	return (
 		<div>
 			<NewTable />
 			
 			<NewConnect />
+
+			<Portal>
+				<Show when={dbPreview()}>
+					<Tw class="absolute top-0 left-0 right-0 bottom-0 flex" />
+					<div>
+						<Tw class="bg-white p-2 w-96 rounded m-auto" />
+						<div>
+							<Tw class="flex text-xs" />
+							<div>
+								<p class="flex-1 font-mono">SELECT * FROM {dbPreview()}</p>
+								<button onClick={() => setDbpreview("")}>Close</button>
+							</div>
+							<Tw class="h-60 overflow-auto" />
+							<div style={{"font-size": ".7em"}}>
+								<WindowTable 
+									data={dataPreview()}
+									showGrouping={false}
+								/>
+							</div>
+						</div>
+					</div>
+				</Show>
+			</Portal>
 			
 			<section class="grid h-screen" style={`grid-template-columns: ${DIMENSION.aside.w} ${DIMENSION.main.w}`}>
 				<aside class="bg-stone-50 border-r-2 border-r-stone-400">
@@ -90,11 +124,13 @@ function App() {
 
 								<For each={dbTables()}>
 									{table => <>
-
-										<Tw class="block text-xs cursor-pointer py-1 px-2 w-full text-left" />
-										<Tw class="hover:bg-slate-200" />
-										<Tw class="disabled:text-gray-500 disabled:cursor-default disabled:hover:bg-white" />
-										<button disabled>{table}</button>
+										<Tw class="group block text-xs py-1 w-full px-2 text-left" />
+										<Tw class="disabled:text-gray-500 disabled:cursor-default" />
+										<button disabled>
+											{table}
+											<Tw class="group-hover:inline hidden float-right cursor-pointer text-blue-500 underline" />
+											<span onClick={() => setDbpreview(table)}>Query</span>
+										</button>
 
 									</>}
 								</For>

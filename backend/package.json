@@ -1,0 +1,47 @@
+{
+  "name": "data-cynical",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "aikmandean",
+  "license": "ISC",
+  "dependencies": {
+    "@fastify/http-proxy": "^8.4.0",
+    "@fastify/static": "^6.8.0",
+    "@hwyblvd/server": "^2.0.0",
+    "@hwyblvd/st": "^2.0.0",
+    "find-free-ports": "^3.0.0",
+    "mdb-reader": "^2.2.5",
+    "mssql": "^7.2.0",
+    "mysql": "^2.18.1",
+    "openurl": "^1.1.1",
+    "papaparse": "^5.3.2",
+    "pg": "^8.8.0",
+    "postgres": "^3.3.3",
+    "sql.js": "^1.8.0"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.2",
+    "@types/http-server": "^0.12.1",
+    "@types/mssql": "^8.1.1",
+    "@types/mysql": "^2.15.21",
+    "@types/openurl": "^1.0.0",
+    "@types/papaparse": "^5.3.7",
+    "@types/pg": "^8.6.5",
+    "@types/sql.js": "^1.4.4"
+  },
+  "bin": "index.cjs",
+  "pkg": {
+    "scripts": "index.cjs",
+    "assets": "views/**/*",
+    "targets": [
+      "node18-macos-arm64"
+    ],
+    "outputPath": "dist"
+  }
+}

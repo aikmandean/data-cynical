@@ -345,7 +345,7 @@ EditSelect = fn(props => {
                                                                             value={a.params[paramId]} 
                                                                             onChange={e => updateMacro.call.params({ paramId, ...val(e) })} />
                                                                         <datalist id={`${props.queryId}-${a.call}-${paramId}`}>
-                                                                            <For each={queryWindow.columns(props)}>
+                                                                            <For each={queryWindow.columnsNameFull(props)}>
                                                                                 {x => <option textContent={x} />}
                                                                             </For>
                                                                         </datalist>
@@ -404,7 +404,7 @@ EditSelect = fn(props => {
                                                         <div>
                                                             <p class="p-2 pt-6 text-xs">Select column</p>
                                                             <Show 
-                                                                when={!a.def || queryWindow.columns(props).includes(a.def)}
+                                                                when={!a.def || queryWindow.columnsNameFull(props).includes(a.def)}
                                                                 fallback={<>
                                                                     <select 
                                                                         class="w-full p-4 font-mono text-xs"
@@ -421,8 +421,20 @@ EditSelect = fn(props => {
                                                                         value={a.def} 
                                                                         onChange={e => updateMacro.defCol.set(val(e))}>
                                                                         <option textContent="Select a column" />
-                                                                        <For each={queryWindow.columns(props)}>
-                                                                            {x => <option textContent={x} />}
+                                                                        <For each={Object.entries(queryWindow.columnsNameFull(props)
+                                                                            .reduce((o, colFull) => {
+                                                                                const [table, col] = colFull.split(".")
+                                                                                o[table] ||= []
+                                                                                o[table].push(col)
+                                                                                return o
+                                                                            }, {} as Record<string, string[]>))}>
+                                                                                {([tableId, cols]) => (
+                                                                                    <optgroup label={tableId}>
+                                                                                        <For each={cols}>
+                                                                                            {x => <option value={`${tableId}.${x}`}>{x}</option>}
+                                                                                        </For>
+                                                                                    </optgroup>
+                                                                                )}
                                                                         </For>
                                                                     </select>
                                                                 }
